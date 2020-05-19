@@ -6,7 +6,7 @@
 /*   By: mtriston <mtriston@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/16 16:16:14 by mtriston          #+#    #+#             */
-/*   Updated: 2020/05/18 22:00:06 by mtriston         ###   ########.fr       */
+/*   Updated: 2020/05/19 20:33:20 by mtriston         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,11 +62,12 @@ static char		*check_over(char *over, char **line)
 int				get_next_line(int fd, char **line)
 {
 	static char	*over;
-	char		buf[BUFFER_SIZE + 1];
+	char		*buf;
 	char		*new_line_ptr;
 	int			read_bytes;
 
-	if (fd < 0 || line == NULL || BUFFER_SIZE < 1 || read(fd, buf, 0 != 0))
+	if (BUFFER_SIZE < 1 ||  fd < 0 || !line || \
+	!(buf = malloc((BUFFER_SIZE + 1) * sizeof(char))))
 		return (-1);
 	new_line_ptr = check_over(over, line);
 	while (!new_line_ptr && (read_bytes = read(fd, buf, BUFFER_SIZE)))
@@ -80,8 +81,9 @@ int				get_next_line(int fd, char **line)
 		}
 		*line = ft_strjoin(*line, buf);
 	}
+	free(buf);
 	if (read_bytes != -1 && (read_bytes || ft_strlen(over) || ft_strlen(*line)))
 		return (1);
 	free(over);
-	return (0);
+	return ((read_bytes != -1) ? 0 : -1);
 }
