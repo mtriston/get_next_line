@@ -6,7 +6,7 @@
 /*   By: mtriston <mtriston@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/16 16:16:20 by mtriston          #+#    #+#             */
-/*   Updated: 2020/05/19 23:21:53 by mtriston         ###   ########.fr       */
+/*   Updated: 2020/05/22 19:36:25 by mtriston         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 typedef struct	gnl
 {
 	int			fd;
-	char		*over;
+	char		over[BUFFER_SIZE + 1];
 	struct gnl	*next;
 }				gnl_list;
 

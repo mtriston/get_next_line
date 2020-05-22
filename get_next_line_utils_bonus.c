@@ -6,7 +6,7 @@
 /*   By: mtriston <mtriston@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/16 16:16:18 by mtriston          #+#    #+#             */
-/*   Updated: 2020/05/19 23:20:01 by mtriston         ###   ########.fr       */
+/*   Updated: 2020/05/22 19:54:18 by mtriston         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,6 @@ void		ft_lstclear(gnl_list **lst)
 			temp = ptr;
 			ptr = ptr->next;
 			temp->fd = 0;
-			free(temp->over);
 			free(temp);
 		}
 		*lst = NULL;
