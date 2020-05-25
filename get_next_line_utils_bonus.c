@@ -6,7 +6,7 @@
 /*   By: mtriston <mtriston@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/16 16:16:18 by mtriston          #+#    #+#             */
-/*   Updated: 2020/05/22 19:54:18 by mtriston         ###   ########.fr       */
+/*   Updated: 2020/05/25 11:47:52 by mtriston         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,10 +71,10 @@ char	*ft_strchr(const char *s, int c)
 	return (NULL);
 }
 
-void		ft_lstclear(gnl_list **lst)
+void	ft_lstclear(t_list **lst)
 {
-	gnl_list *ptr;
-	gnl_list *temp;
+	t_list *ptr;
+	t_list *temp;
 
 	if (lst && *lst)
 	{

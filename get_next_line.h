@@ -6,7 +6,7 @@
 /*   By: mtriston <mtriston@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/16 16:16:20 by mtriston          #+#    #+#             */
-/*   Updated: 2020/05/18 22:33:57 by mtriston         ###   ########.fr       */
+/*   Updated: 2020/05/25 11:47:52 by mtriston         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,23 @@
 # include <unistd.h>
 # include <stdlib.h>
 
-int		get_next_line(int fd, char **line);
+typedef struct		s_list
+{
+	int				fd;
+	char			over[BUFFER_SIZE + 1];
+	struct s_list	*next;
+}					t_list;
 
-char	*ft_strcpy(char *dest, const char *src);
+int					get_next_line(int fd, char **line);
 
-char	*ft_strdup(char const *s);
+char				*ft_strcpy(char *dest, const char *src);
 
-size_t	ft_strlen(const char *s);
+char				*ft_strdup(char const *s);
 
-char	*ft_strchr(const char *s, int c);
+size_t				ft_strlen(const char *s);
 
+char				*ft_strchr(const char *s, int c);
+
+void				ft_lstclear(t_list **lst);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: mtriston <mtriston@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/16 16:16:14 by mtriston          #+#    #+#             */
-/*   Updated: 2020/05/22 22:26:04 by mtriston         ###   ########.fr       */
+/*   Updated: 2020/05/25 11:47:52 by mtriston         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,26 +37,24 @@ static char		*ft_strjoin(char const *s1, char const *s2)
 
 static int		check_over(char *over, char **new_line_ptr, char **line)
 {
+	int i;
+
+	i = 0;
 	*new_line_ptr = NULL;
-	if (over && *over)
+	if ((*new_line_ptr = ft_strchr(over, '\n')))
 	{
-		if ((*new_line_ptr = ft_strchr(over, '\n')))
-		{
-			**new_line_ptr = '\0';
-			if (!(*line = ft_strdup(over)))
-				return (-1);
-			over = ft_strcpy(over, ++*new_line_ptr);
-		}
-		else
-		{
-			if (!(*line = ft_strdup(over)))
-				return (-1);
-			over[0] = '\0';
-		}
-	}
-	else
+		**new_line_ptr = '\0';
 		if (!(*line = ft_strdup(over)))
 			return (-1);
+		over = ft_strcpy(over, ++(*new_line_ptr));
+	}
+	else
+	{
+		if (!(*line = ft_strdup(over)))
+			return (-1);
+		while (i <= BUFFER_SIZE)
+			over[i++] = '\0';
+	}
 	return (1);
 }
 
@@ -75,36 +73,43 @@ static int		next_line(int fd, char *over, char **line)
 		if ((new_line_ptr = ft_strchr(buf, '\n')))
 		{
 			*new_line_ptr = '\0';
-			over = ft_strcpy(over, ++new_line_ptr);
+			ft_strcpy(over, ++new_line_ptr);
 		}
-		*line = ft_strjoin(*line, buf);
+		if (!(*line = ft_strjoin(*line, buf)) || read_bytes < 0)
+			return (-1);
 	}
-	if (read_bytes != -1 && (read_bytes || ft_strlen(*line)))
-		return (1);
-	return ((read_bytes != -1) ? 0 : -1);
+	return ((ft_strlen(over) || read_bytes) ? 1 : 0);
 }
 
-static gnl_list *new_list(int fd)
+static t_list	*new_list(int fd)
 {
-	gnl_list *list;
+	int			i;
+	t_list	*list;
 
-	if (!(list = (gnl_list *)malloc(sizeof(gnl_list))))
+	i = 0;
+	if (!(list = (t_list *)malloc(sizeof(t_list))))
 		return (NULL);
 	list->fd = fd;
 	list->next = NULL;
+	while (i < BUFFER_SIZE)
+	{
+		list->over[i] = '\0';
+		i++;
+	}
 	return (list);
 }
 
-int get_next_line(int fd, char **line)
+int				get_next_line(int fd, char **line)
 {
-	static gnl_list	*begin_list;
-	gnl_list		*ptr;
+	static t_list	*begin_list;
+	t_list		*ptr;
 	int				flag;
+
 	if (!begin_list)
 		if (!(begin_list = new_list(fd)))
 			return (-1);
 	ptr = begin_list;
-	while(ptr)
+	while (ptr)
 	{
 		if (ptr->fd == fd)
 		{
@@ -115,8 +120,6 @@ int get_next_line(int fd, char **line)
 		{
 			if (!(ptr->next = new_list(fd)))
 				flag = -1;
-			else
-				flag = next_line(fd, ptr->next->over, line);
 		}
 		ptr = ptr->next;
 	}
